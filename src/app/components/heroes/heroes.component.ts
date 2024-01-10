@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { CommonModule, NgFor, NgIf } from '@angular/common';
-import { Hero } from '../hero';
+import { Hero } from '../../models/hero';
 import { FormsModule } from '@angular/forms';
-import { HEROES } from '../mock-heroes';
 import { HeroDetailComponent } from '../hero-detail/hero-detail.component';
+import { HeroService } from '../../services/hero.service';
 
 @Component({
   selector: 'app-heroes',
@@ -14,10 +14,22 @@ import { HeroDetailComponent } from '../hero-detail/hero-detail.component';
 })
 export class HeroesComponent {
 
-  heroes = HEROES;
+  heroes: Hero[] = [];
   selectedHero?: Hero;
+
+  constructor(private heroService: HeroService) {
+    
+  }
   
+  ngOnInit(): void {
+    this.getHeroes();
+  }
+
   onSelect(hero: Hero): void {
     this.selectedHero = hero;
+  }
+
+  getHeroes(): void {
+    this.heroService.getHeroes().subscribe(heroes => this.heroes = heroes);
   }
 }

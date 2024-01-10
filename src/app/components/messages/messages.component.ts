@@ -10,5 +10,5 @@ import { CommonModule } from '@angular/common';
   styleUrl: './messages.component.css'
 })
 export class MessageComponent {
-  constructor (private messageService: MessageService) {}
+  constructor (public messageService: MessageService) {}
 }

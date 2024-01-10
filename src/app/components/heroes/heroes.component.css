@@ -1,4 +1,9 @@
 /* HeroesComponent's private CSS styles */
+
+h2 {
+  text-align: center;
+}
+
 .heroes {
     margin: 0 0 2em 0;
     list-style-type: none;

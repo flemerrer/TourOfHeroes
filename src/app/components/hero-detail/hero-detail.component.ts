@@ -1,6 +1,6 @@
 import { Component, Input, inject } from '@angular/core';
 import { Hero } from '../../models/hero';
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HeroService } from '../../services/hero.service';
 import { ActivatedRoute } from '@angular/router';
@@ -15,9 +15,14 @@ import { ActivatedRoute } from '@angular/router';
 export class HeroDetailComponent {
   
   hero!: Hero;
-  route: ActivatedRoute = inject(ActivatedRoute);
+  // route: ActivatedRoute = inject(ActivatedRoute);
+  // now injected directly in constructor
 
-  constructor(private heroService: HeroService) {
+  constructor(
+    private heroService: HeroService, 
+    private route: ActivatedRoute,
+    private location: Location
+    ) {
     
   }
   
@@ -30,4 +35,8 @@ export class HeroDetailComponent {
     this.heroService.getHeroById(id).subscribe((x) => this.hero = x);
   }
   
+  goBack(): void {
+    this.location.back();
+  }
+
 }

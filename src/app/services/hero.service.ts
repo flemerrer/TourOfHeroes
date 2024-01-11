@@ -40,19 +40,58 @@ private handleError<T>(operation = 'operation', result?: T) {
   }
 
   getHeroes(): Observable<Hero[]> {
+    
     return this.http.get<Hero[]>(this.heroesUrl)
-    .pipe(
-      tap(_ => this.log('fetched heroes')),
-      catchError(this.handleError<Hero[]>('getHeroes', []))
-    );
+      .pipe(
+        tap(_ => this.log('fetched heroes')),
+        catchError(this.handleError<Hero[]>('getHeroes', []))
+      );
   }
 
   getHeroById(id: number): Observable<Hero> {
     const url = `${this.heroesUrl}/${id}`;
-    return this.http.get<Hero>(url).pipe(
-      tap(_ => this.log(`fetched hero id=${id}`)),
-      catchError(this.handleError<Hero>(`getHero id=${id}`))
-    );
+    
+    return this.http.get<Hero>(url)
+      .pipe(
+        tap( () => this.log(`fetched hero id=${id}`)),
+        catchError(this.handleError<Hero>(`getHero id=${id}`))
+      );
   }
+
+  search(term: string): Observable<Hero[]> {
+   
+    if(!term.trim()){
+      return of([]);
+      // if not search term, return empty hero array.
+      // utiliser le trim permet de ne pas chercher avec un / plusieurs espaces en paramètre
+    }
+
+    return this.http.get<Hero[]>(`${this.heroesUrl}/?name=${term}`).pipe(
+      tap( x => x.length ? 
+        this.log('found heroes matching ' + term) :
+        this.log('no heroes matching ' + term)),
+        catchError(this.handleError<Hero[]>('searchHeroes', []))
+    ) 
+  }
+
+  // addHero(hero: Hero): void {
+  //   this.http.post(this.heroesUrl, hero);
+  //   this.log(`created hero id=${id}`))
+
+  // }
+
+  updateHero(hero: Hero) {
+    let updatedHero = {
+      "id": `"${hero.id}"`,
+      "name": `"${hero.name}"`
+    }
+    this.http.put(this.heroesUrl + '/' + hero.id, updatedHero);
+    this.log(`updated hero id=${hero.id}`);
+  }
+
+  // deleteHero(id: number) {
+  //   this.http.delete(this.heroesUrl + '/' + id);
+  //   this.log(`deleted hero id=${id}`))
+  // }
 
 }

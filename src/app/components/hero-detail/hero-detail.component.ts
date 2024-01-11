@@ -18,6 +18,8 @@ export class HeroDetailComponent {
   // route: ActivatedRoute = inject(ActivatedRoute);
   // now injected directly in constructor
 
+  id = Number(this.route.snapshot.paramMap.get('id'));
+
   constructor(
     private heroService: HeroService, 
     private route: ActivatedRoute,
@@ -31,12 +33,18 @@ export class HeroDetailComponent {
   }
 
   getHeroDetails(): void {
-    const id = Number(this.route.snapshot.paramMap.get('id'));
-    this.heroService.getHeroById(id).subscribe((x) => this.hero = x);
+    this.heroService.getHeroById(this.id).subscribe((x) => this.hero = x);
   }
   
   goBack(): void {
     this.location.back();
+  }
+
+  save(): void {
+    if (this.hero) {
+      this.heroService.updateHero(this.hero);
+      this.goBack();
+    }
   }
 
 }
